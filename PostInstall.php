@@ -13,34 +13,30 @@ class PostInstall
     public static function execute()
     {
         $configFolder = 'config';
+        $filename = 'cli-config';
         
         if (!file_exists($configFolder)) {
             mkdir($configFolder);
         }
-        $layout = "<?php
-/* @var \$this League\Plates\Template\Template */
-?>
-<html>
-    <head>
-        <title>Test Plates</title>
-    </head>
-    <body>
-        <?php echo \$this->section('body'); ?>
-    </body>
-</html>";
-        $template = "<?php
-/* @var \$this League\Plates\Template\Template */
-\$this->layout('layout');
-?>
-<?php \$this->start('body'); ?>
-    Hello Plates !!
-<?php \$this->stop();";
-        if (!file_exists($layoutFile = $configFolder . '/' . $layoutFileName . '.php')) {
-            file_put_contents($layoutFile, $layout);
+
+        $cliConfig = '<?php
+
+use Doctrine\ORM\Tools\Console\ConsoleRunner;
+use Zend\Diactoros\ServerRequestFactory;
+
+require __DIR__.\'/../init.php\';
+
+/**
+ * @var \App\App $app
+ */
+$app->boot();
+
+return ConsoleRunner::createHelperSet($app->get(\'doctrine.manager\'));
+';
+        if (!file_exists($layoutFile = $configFolder . '/' . $filename . '.php')) {
+            file_put_contents($layoutFile, $cliConfig);
         }
-        if (!file_exists($templateFile = $configFolder . '/' . $templateFileName . '.php')) {
-            file_put_contents($templateFile, $template);
-        }
+
     }
 
 }
