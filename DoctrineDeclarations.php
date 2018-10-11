@@ -24,7 +24,7 @@ class DoctrineDeclarations implements DeclarationInterface
 
         $containerBuilder->addDefinitions([
             'doctrine.config' => function(Container $container) {
-                return Setup::createAnnotationMetadataConfiguration([$container->get('project.dir') . "/src/Entity"], $container->get('debug'));
+                return Setup::createAnnotationMetadataConfiguration([$container->get('projectSrc') . "/Entity"], $container->get('debug'));
             },
             EntityManagerInterface::class => function(Container $container) {
                 return EntityManager::create(
