@@ -25,7 +25,7 @@ class DoctrineDeclarations implements DeclarationInterface
 
         $containerBuilder->addDefinitions([
             'doctrine.config' => function (Container $container) {
-                return Setup::createAnnotationMetadataConfiguration([$container->get('project.src') . "/Entity"], $container->get('debug'));
+                return Setup::createAnnotationMetadataConfiguration($container->get('doctrine.entity_folders'), $container->get('debug'));
             },
             EntityManagerInterface::class => function (Container $container) {
                 return EntityManager::create(
@@ -34,7 +34,7 @@ class DoctrineDeclarations implements DeclarationInterface
                 );
             },
             'doctrine.entity_folders' => function (Container $container) {
-                [$container->get('project.src') . "/Entity"];
+                return [$container->get('project.src') . "/Entity"];
             },
             'doctrine.manager' => get(EntityManagerInterface::class),
             'doctrine.connection' => function (Container $container) {
